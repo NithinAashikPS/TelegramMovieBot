@@ -2,7 +2,6 @@ import math
 import urllib
 import string
 import random
-import requests
 import firebase_admin
 from firebase_admin import db
 from bs4 import BeautifulSoup
