@@ -1,0 +1,6 @@
+<strong>🎬 {{movie_data.movieTitle}}</strong>
+
+✅ Download Links 👇👇
+{% for link in movie_data.movieLinks%}
+<b>🔗️ {{link.linkValue}} - {{link.linkKey}}</b>
+{% endfor %}

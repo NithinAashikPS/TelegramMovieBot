@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="20dp"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:paddingLeft="20dp"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/switch_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/all_channels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_channels"
+                android:fontFamily="@font/nunito_bold"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/all_movies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_movies"
+                android:fontFamily="@font/nunito_extra_bold"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:textSize="28sp"
+                tools:ignore="MissingPrefix" />
+
+        </LinearLayout>
+
+<!--        <ImageView-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_gravity="right|center"-->
+<!--            android:background="@drawable/calendar"-->
+<!--            android:id="@+id/calendar"/>-->
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+<!--            <ImageView-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="300dp"-->
+<!--                android:id="@+id/noDataImage"-->
+<!--                android:layout_gravity="center"/>-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/movie_recycler"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/channel_recycler"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:text="Add Movie"
+            android:fontFamily="@font/nunito_bold"
+            android:drawablePadding="10dp"
+            android:paddingTop="10dp"
+            android:id="@+id/add_movie"
+            android:layout_gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:drawableLeft="@drawable/ic_add_black_24dp"
+            android:textAlignment="center"
+            android:layout_weight="0.5"
+            android:layout_marginBottom="20dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:text="Add Channel"
+            android:visibility="gone"
+            android:fontFamily="@font/nunito_bold"
+            android:drawablePadding="10dp"
+            android:paddingTop="10dp"
+            android:id="@+id/add_channel"
+            android:layout_gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:drawableLeft="@drawable/ic_add_black_24dp"
+            android:textAlignment="center"
+            android:layout_weight="0.5"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
