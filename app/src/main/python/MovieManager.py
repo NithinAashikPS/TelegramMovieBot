@@ -2,6 +2,7 @@ import math
 import urllib
 import string
 import random
+import requests
 import firebase_admin
 from firebase_admin import db
 from bs4 import BeautifulSoup
@@ -11,10 +12,11 @@ from urllib.parse import urlparse, urlencode
 from ChannelManager import *
 from Global import *
 
-cred = credentials.Certificate("{}/secure/serviceAccountKey.json".format(root))
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://moviebot-11e34-default-rtdb.asia-southeast1.firebasedatabase.app/'
-})
+if not firebase_admin._apps:
+    cred = credentials.Certificate("{}/secure/serviceAccountKey.json".format(root))
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://moviebot-11e34-default-rtdb.asia-southeast1.firebasedatabase.app/'
+    })
 
 def convert_size(size_bytes):
     if size_bytes == 0:
@@ -73,7 +75,7 @@ def get_movie(link, movie_title):
 
     ref = db.reference("Channels")
     channels = ref.get()
-    for channel in channels:
+    for channel in channels or []:
         send_movie(channels[channel]["channelId"], channels[channel]["channelAccessHash"], data)
 
     return data

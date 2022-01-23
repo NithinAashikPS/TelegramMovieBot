@@ -1,14 +1,23 @@
 from telethon.sync import TelegramClient
 from flask import Flask, render_template
 from telethon.tl.types import InputPeerChannel, InputChatUploadedPhoto
-from telethon.tl.functions.channels import EditPhotoRequest
+from telethon.tl.functions.channels import EditPhotoRequest, InviteToChannelRequest
 from telethon import functions, types
+from firebase_admin import db
+import firebase_admin
+from firebase_admin import credentials
 from Global import *
 import asyncio
 import requests
 
 
 app = Flask(__name__, template_folder="{}/templates".format(root))
+
+if not firebase_admin._apps:
+    cred = credentials.Certificate("{}/secure/serviceAccountKey.json".format(root))
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://moviebot-11e34-default-rtdb.asia-southeast1.firebasedatabase.app/'
+    })
 
 def send_movie(channel_id, channel_access_hash, data):
 
@@ -20,6 +29,8 @@ def send_movie(channel_id, channel_access_hash, data):
     with app.app_context():
         receiver = InputPeerChannel(channel_id, channel_access_hash)
         client.send_message(receiver, parse_mode = "HTML", message = render_template("movie_page.html".format(root), movie_data = data))
+
+    client.disconnect()
 
 
 def add_channel(channel_link):
@@ -36,6 +47,18 @@ def add_channel(channel_link):
     data["channelId"] = channel.__dict__["id"]
     data["channelAccessHash"] = channel.__dict__["access_hash"]
 
+    ref = db.reference("Members")
+    members = ref.get()
+    for member in members or []:
+        client(InviteToChannelRequest(InputPeerChannel(data["channelId"], data["channelAccessHash"]), [client.get_entity(members[member]["memberId"])]))
+
+    client.disconnect()
+
+    ref = db.reference("Movies")
+    movies = ref.get()
+    for movie in movies or []:
+        send_movie(data["channelId"], data["channelAccessHash"], movies[movie])
+
     return data
 
 def delete_channel(channel_id, channel_access_hash):
@@ -48,8 +71,9 @@ def delete_channel(channel_id, channel_access_hash):
     try:
         client(functions.channels.DeleteChannelRequest(types.InputPeerChannel(channel_id, channel_access_hash)))
     except:
+        client.disconnect()
         return False
-
+    client.disconnect()
     return True
 
 def create_private_channel(data):
@@ -85,4 +109,5 @@ def create_private_channel(data):
         receiver = InputPeerChannel(new_channel_id, new_channel_access_hash)
         client.send_message(receiver, parse_mode = "HTML", message = render_template("message.html".format(root), movie_data = data), file = data["movieThumbnail"])
 
+    client.disconnect()
     return link.__dict__["link"], new_channel_id, new_channel_access_hash
