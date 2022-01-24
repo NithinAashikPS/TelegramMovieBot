@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:text="Fill the details below to create new channel"
+            android:text="Fill the details below to add new channel"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:alpha="0.8"

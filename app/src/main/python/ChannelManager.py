@@ -1,6 +1,6 @@
 from telethon.sync import TelegramClient
 from flask import Flask, render_template
-from telethon.tl.types import InputPeerChannel, InputChatUploadedPhoto
+from telethon.tl.types import InputPeerChannel, InputChatUploadedPhoto, InputPeerUser
 from telethon.tl.functions.channels import EditPhotoRequest, InviteToChannelRequest
 from telethon import functions, types
 from firebase_admin import db
@@ -48,25 +48,16 @@ def add_channel(channel_link):
     data["channelId"] = channel.__dict__["id"]
     data["channelAccessHash"] = channel.__dict__["access_hash"]
 
-    ref = db.reference("Members")
-    members = ref.get()
+    ref = db.reference("Members/userName")
+    user_name = ref.get()
     users_to_add = []
-    i = 0
-    for member in members or []:
-        # users_to_add.append(client.get_entity(int(members[member]["memberId"])))
-        if i == 100:
-            break
-        i += 1
+    for member in user_name or []:
         try:
-            client(InviteToChannelRequest(InputPeerChannel(data["channelId"], data["channelAccessHash"]), [client.get_entity(members[member]["memberId"])]))
-            print(i)
-            # users_to_add.append()
+            users_to_add.append(client.get_input_entity(member))
         except:
             continue
 
-    # print(users_to_add)
-    #
-    # client(InviteToChannelRequest(InputPeerChannel(data["channelId"], data["channelAccessHash"]), users_to_add))
+    client(InviteToChannelRequest(InputPeerChannel(data["channelId"], data["channelAccessHash"]), users_to_add))
 
     client.disconnect()
 
