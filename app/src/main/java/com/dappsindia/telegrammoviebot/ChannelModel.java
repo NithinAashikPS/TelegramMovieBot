@@ -4,16 +4,26 @@ public class ChannelModel {
     private Long channelId;
     private Long channelAccessHash;
     private String channelTitle;
+    private String channelLink;
 
     private String key;
 
     public ChannelModel() {
     }
 
-    public ChannelModel(Long channelId, Long channelAccessHash, String channelTitle) {
+    public ChannelModel(Long channelId, Long channelAccessHash, String channelTitle, String channelLink) {
         this.channelId = channelId;
         this.channelAccessHash = channelAccessHash;
         this.channelTitle = channelTitle;
+        this.channelLink = channelLink;
+    }
+
+    public String getChannelLink() {
+        return channelLink;
+    }
+
+    public void setChannelLink(String channelLink) {
+        this.channelLink = channelLink;
     }
 
     public String getKey() {

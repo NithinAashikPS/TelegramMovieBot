@@ -43,14 +43,30 @@ def add_channel(channel_link):
 
     channel = client.get_entity(channel_link)
 
+    data["channelLink"] = "https://t.me/{}".format(channel_link)
     data["channelTitle"] = channel.__dict__["title"]
     data["channelId"] = channel.__dict__["id"]
     data["channelAccessHash"] = channel.__dict__["access_hash"]
 
     ref = db.reference("Members")
     members = ref.get()
+    users_to_add = []
+    i = 0
     for member in members or []:
-        client(InviteToChannelRequest(InputPeerChannel(data["channelId"], data["channelAccessHash"]), [client.get_entity(members[member]["memberId"])]))
+        # users_to_add.append(client.get_entity(int(members[member]["memberId"])))
+        if i == 100:
+            break
+        i += 1
+        try:
+            client(InviteToChannelRequest(InputPeerChannel(data["channelId"], data["channelAccessHash"]), [client.get_entity(members[member]["memberId"])]))
+            print(i)
+            # users_to_add.append()
+        except:
+            continue
+
+    # print(users_to_add)
+    #
+    # client(InviteToChannelRequest(InputPeerChannel(data["channelId"], data["channelAccessHash"]), users_to_add))
 
     client.disconnect()
 

@@ -1,5 +1,7 @@
 package com.dappsindia.telegrammoviebot;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +50,9 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.channelId.setText(channelModels.get(position).getChannelId().toString());
+
+        String channelLink = channelModels.get(position).getChannelLink();
+        holder.channelId.setText(channelLink);
         holder.channelTitle.setText(channelModels.get(position).getChannelTitle());
         holder.count.setText(String.valueOf(position + 1));
 
@@ -56,6 +60,12 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
         Long channelId = channelModels.get(position).getChannelId();
         Long channelAccessHash = channelModels.get(position).getChannelAccessHash();
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.itemView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(channelLink)));
+            }
+        });
         holder.options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
