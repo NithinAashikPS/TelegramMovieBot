@@ -48,17 +48,6 @@ def add_channel(channel_link):
     data["channelId"] = channel.__dict__["id"]
     data["channelAccessHash"] = channel.__dict__["access_hash"]
 
-    ref = db.reference("Members/userName")
-    user_name = ref.get()
-    users_to_add = []
-    for member in user_name or []:
-        try:
-            users_to_add.append(client.get_input_entity(member))
-        except:
-            continue
-
-    client(InviteToChannelRequest(InputPeerChannel(data["channelId"], data["channelAccessHash"]), users_to_add))
-
     client.disconnect()
 
     ref = db.reference("Movies")
