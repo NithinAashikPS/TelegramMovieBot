@@ -39,26 +39,25 @@ public class AddChannelTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        String data = channelManager.callAttr("add_channel", channelLink).toString();
-        String key = myRef.push().getKey();
-        Gson gson = new Gson();
-        ChannelModel channelModel = gson.fromJson(data, ChannelModel.class);
-        myRef.child(key).setValue(channelModel).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                uploadStatus.uploaded(false);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                uploadStatus.uploaded(true);
-            }
-        });
-//        try {
-//
-//        } catch (Exception e) {
-//            uploadStatus.uploaded(true);
-//        }
+        try {
+            String data = channelManager.callAttr("add_channel", channelLink).toString();
+            String key = myRef.push().getKey();
+            Gson gson = new Gson();
+            ChannelModel channelModel = gson.fromJson(data, ChannelModel.class);
+            myRef.child(key).setValue(channelModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    uploadStatus.uploaded(false);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    uploadStatus.uploaded(true);
+                }
+            });
+        } catch (Exception e) {
+            uploadStatus.uploaded(true);
+        }
         return null;
     }
 }
